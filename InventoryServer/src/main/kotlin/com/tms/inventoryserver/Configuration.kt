@@ -14,8 +14,9 @@ internal class LoadDatabase {
     @Bean
     fun initDatabase(repository: ItemRepository): CommandLineRunner {
         return CommandLineRunner { args: Array<String?>? ->
-            log.info("Preloading " + repository.save(Item("Syringe", false, "0000039321")))
-            log.info("Preloading " + repository.save(Item("Gauze", true, "0000039322")))
+            log.info("Preloading " + repository.save(Item("Syringe", false, "0000000000")))
+            log.info("Preloading " + repository.save(Item("Gauze", false, "0000039321")))
+            log.info("Preloading " + repository.save(Item("Gauze Dressing Pad", false, "0000030583")))
         }
     }
 

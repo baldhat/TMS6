@@ -34,7 +34,7 @@ class ItemListController(
     @PostMapping("/items/add")
     fun addItem(): Boolean {
         log.info("Adding random item")
-        val e = Item("tag1", false, "00000" +
+        val e = Item("Gauze Dressing pad", false, "00000" +
                 Random.nextInt(0, 99999).toString().padStart(5, '0'))
         repository.save(e)
         return true

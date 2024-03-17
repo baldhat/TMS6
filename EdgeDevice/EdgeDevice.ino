@@ -9,7 +9,7 @@
 const char* ssid = "Baldhats";
 const char* password = "tms18team6";
 
-const char* serverName = "http://192.168.179.80:8080/scanners/1/present";
+const char* serverName = "http://169.254.81.133:8080/scanners/1/present";
 WiFiClient client;
 HTTPClient http;
 
@@ -26,18 +26,18 @@ String tagList = "";
 void setup() {
     Serial.begin(115200);
     delay(200);
-    Serial.swap();
-    delay(200);
-    pinMode(LED_BUILTIN, OUTPUT);
-    /*
+    
     WiFi.enableInsecureWEP();
     WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
+      Serial.print(".");
+      delay(500);
     }
-    digitalWrite(LED_BUILTIN, HIGH);
+    Serial.println("");
+    Serial.swap();
+    delay(200);
     http.begin(client, serverName);
-    */
+    
 }
 
 // main loop
@@ -93,14 +93,9 @@ void loop() {
     Serial.flush();
     Serial.swap();
     
-    /* 
     http.addHeader("Content-Type", "application/json");
-    if (http.POST(tagList) != 200) {
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(40);
-      digitalWrite(LED_BUILTIN, HIGH);
-    }
-    */
+    http.POST(tagList);
+    
   }
 }
 

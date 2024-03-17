@@ -3,14 +3,14 @@
 #include <WiFiClient.h>
 
 // Network settings
-const char* ssid = "BaldhatsG8";
+const char* ssid = "Baldhats";
 const char* password = "tms18team6";
 
 const char* serverName = "http://192.168.179.80:8080/scanners/1/present";
 WiFiClient client;
 HTTPClient http;
 
-// keeping track of tags
+// keeping track of tags[]
 const int MAX_TAGS = 10;      // Maximum number of unique tags to store
 String uniqueTags[MAX_TAGS];  // Array to store unique tags
 int tagCount = 0;             // Counter for unique tags
@@ -20,29 +20,37 @@ String tagList = "";
 
 // connect to WiFi
 void setup() {
-    Serial.begin(9600, SERIAL_8N1, SerialMode::SERIAL_FULL, 1, true);
-    Serial1.begin(9600);
-    delay(10);
+    Serial.begin(9600);
+    delay(200);
     Serial.swap();
+    delay(200);
     pinMode(LED_BUILTIN, OUTPUT);
-    //WiFi.enableInsecureWEP();
+    /*
+    WiFi.enableInsecureWEP();
     WiFi.begin(ssid, password);
-
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
     }
     digitalWrite(LED_BUILTIN, HIGH);
     http.begin(client, serverName);
+    */
 }
 
 // main loop
 void loop() {
   if(Serial.available() > 10) {
+    uint32_t arrivalTime = millis();
     incomingTag = Serial.readStringUntil('\x03');
-    incomingTag.remove(0, 2);
-    incomingTag.remove(11, 3);
-
-    if (!isTagAlreadyPresent(incomingTag)) {
+    incomingTag.remove(0, 1);
+    incomingTag.remove(10, 3);
+    
+    Serial.swap();
+    delay(10);
+    Serial.println(incomingTag);
+    Serial.flush();
+    Serial.swap();
+    
+    if (!isTagAlreadyKnown(incomingTag)) {
       if (tagCount < MAX_TAGS) {
         uniqueTags[tagCount] = incomingTag;
         tagCount++;
@@ -53,27 +61,29 @@ void loop() {
         }
         uniqueTags[MAX_TAGS - 1] = incomingTag;
       }
+      
       tagList = tagListToJSON();
-      /*
+      
       Serial.swap();
-      delay(5);
+      delay(10);
       Serial1.println(tagList);
       Serial1.flush();
-      delay(5);
       Serial.swap();
-      */
+      
+      /* 
       http.addHeader("Content-Type", "application/json");
       if (http.POST(tagList) != 200) {
         digitalWrite(LED_BUILTIN, LOW);
         delay(40);
         digitalWrite(LED_BUILTIN, HIGH);
       }
+      */
     }
   }
 }
 
 // Function to check if the tag is already present in the array
-boolean isTagAlreadyPresent(String tag) {
+boolean isTagAlreadyKnown(String tag) {
   for (int i = 0; i < tagCount; i++) {
     if (uniqueTags[i] == tag) {
       return true;
@@ -92,5 +102,5 @@ String tagListToJSON() {
     jsonTagList = jsonTagList + ", \"" + uniqueTags[i] + "\"";
   }
 
-  return "[" + jsonTagList + "]";
+  return "\t[" + jsonTagList + "]";
 }

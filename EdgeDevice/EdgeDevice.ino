@@ -57,6 +57,8 @@ void loop() {
     if (number.length() != 10) {
       return;
     }
+
+    incomingTag = number;
     /*
     Serial.swap();
     delay(10);

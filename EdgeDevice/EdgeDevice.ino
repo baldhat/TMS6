@@ -3,7 +3,7 @@
 #include <WiFiClient.h>
 #include <stdint.h>
 
-#define TAG_REMOVED_TRESHOLD 4000
+#define TAG_REMOVED_TRESHOLD 10000
 
 // Network settings
 const char* ssid = "Baldhats";
@@ -14,30 +14,30 @@ WiFiClient client;
 HTTPClient http;
 
 // keeping track of tags[]
-const int MAX_TAGS = 10;      // Maximum number of unique tags to store
-String uniqueTags[MAX_TAGS];  // Array to store unique tags
-uint32_t tagTime[MAX_TAGS] = { 0 };   // Latest time Tag was scanned
-int tagCount = 0;             // Counter for unique tags
+const int MAX_TAGS = 10;             // Maximum number of unique tags to store
+String uniqueTags[MAX_TAGS];         // Array to store unique tags
+uint32_t tagTime[MAX_TAGS] = { 0 };  // Latest time Tag was scanned
+int tagCount = 0;                    // Counter for unique tags
 
 String incomingTag = "";
 String tagList = "";
 
 // connect to WiFi
 void setup() {
-    Serial.begin(115200);
-    delay(200);
-    
-    WiFi.enableInsecureWEP();
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-      Serial.print(".");
-      delay(500);
-    }
-    Serial.println("");
-    Serial.swap();
-    delay(200);
-    http.begin(client, serverName);
-    
+  Serial.begin(115200);
+  delay(200);
+
+  WiFi.enableInsecureWEP();
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("");
+  Serial.swap();
+  delay(200);
+  http.begin(client, serverName);
 }
 
 // main loop
@@ -80,28 +80,27 @@ void loop() {
         uniqueTags[MAX_TAGS - 1] = incomingTag;
         tagTime[MAX_TAGS - 1] = arrivalTime;
       }
-      
+
     } else {
       tagTime[tagIndex] = arrivalTime;
     }
   }
-  
+
   if (checkIfTagsRemoved()) {
     tagListChanged = true;
   }
 
   if (tagListChanged) {
     tagList = tagListToJSON();
-      
+
     Serial.swap();
     //delay(10);
     Serial.println(tagList);
     Serial.flush();
     Serial.swap();
-    
+
     http.addHeader("Content-Type", "application/json");
     http.POST(tagList);
-    
   }
 }
 
@@ -134,8 +133,8 @@ bool checkIfTagsRemoved() {
       tagRemoved = true;
       tagCount--;
       for (int j = i; j < MAX_TAGS - 1; j++) {
-        uniqueTags[j] = uniqueTags[j+1];
-        tagTime[j] = tagTime[j+1];
+        uniqueTags[j] = uniqueTags[j + 1];
+        tagTime[j] = tagTime[j + 1];
       }
     }
   }
@@ -151,6 +150,6 @@ String tagListToJSON() {
   for (int i = 0; i < tagCount; i++) {
     jsonTagList = jsonTagList + "\"" + uniqueTags[i] + "\", ";
   }
-  jsonTagList.remove(jsonTagList.length()-2, 2);
+  jsonTagList.remove(jsonTagList.length() - 2, 2);
   return "\t[" + jsonTagList + "]";
 }

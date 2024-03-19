@@ -43,12 +43,18 @@ void setup() {
 // main loop
 void loop() {
   bool tagListChanged = false;
-  if(Serial.available() > 10) {
+  if(Serial.available() >= 10) {
     uint32_t arrivalTime = millis();
     incomingTag = Serial.readStringUntil('\x03');
-    incomingTag.remove(0, 1);
-    incomingTag.remove(10, 3);
-    if (incomingTag.length() != 10) {
+    
+    String number = String();
+    for (int i = 0; i < incomingTag.length(); i++) {
+      if (incomingTag[i] >= 48 && incomingTag[i] <= 57) {
+        number += incomingTag[i];
+      }
+    }
+   
+    if (number.length() != 10) {
       return;
     }
     /*

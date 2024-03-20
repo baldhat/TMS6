@@ -16,9 +16,15 @@ import kotlin.random.Random
 class ItemListController(
         private val repository: ItemRepository) {
 
+    @GetMapping("/items/active")
+    fun getActiveItems(): List<Item> {
+        val items = repository.findByActiveOrderByIsPresentAsc(true)
+        return items
+    }
+
     @GetMapping("/items")
     fun getKnownItems(): List<Item> {
-        val items = repository.findAllByOrderByIsPresentAsc()
+        val items = repository.findAll()
         return items
     }
 
@@ -29,6 +35,15 @@ class ItemListController(
             it.isPresent = presentIds.contains(it.id)
             repository.save(it)
         }
+        return true;
+    }
+
+    @PostMapping("/items/enable/{itemId}")
+    fun setEnabledItems(@PathVariable("itemId") itemId: String, @RequestBody enable: Boolean ): Boolean {
+        log.info("Changed item ${itemId} to ${if(enable) "enabled" else "disabled" }")
+        var entity = repository.findById(itemId)
+        entity.active = enable
+        repository.save(entity)
         return true;
     }
 

@@ -10,10 +10,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ConfigComponent } from './config/config.component';
+import { ItemsComponent } from './items/items.component';
+import {MatCheckbox} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ConfigComponent,
+    ItemsComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +28,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MatPaginatorModule,
     MatSortModule,
     MatProgressSpinnerModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCheckbox
   ],
   providers: [
     provideAnimationsAsync()

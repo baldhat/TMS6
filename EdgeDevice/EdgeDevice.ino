@@ -1,20 +1,21 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+//#include <ESP8266WiFi.h>
+//#include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
+#include <HTTPClient.h>
 #include <stdint.h>
 
 #define TAG_REMOVED_TRESHOLD 10000
 
 // Network settings
-const char* ssid = "Baldhats";
+const char* ssid = "BaldhatsG8";
 const char* password = "tms18team6";
 
-const char* serverName = "http://169.254.81.133:8080/scanners/1/present";
+const char* serverName = "http://192.168.238.80:8080/scanners/1/present";
 WiFiClient client;
 HTTPClient http;
 
 // keeping track of tags[]
-const int MAX_TAGS = 10;             // Maximum number of unique tags to store
+const int MAX_TAGS = 20;             // Maximum number of unique tags to store
 String uniqueTags[MAX_TAGS];         // Array to store unique tags
 uint32_t tagTime[MAX_TAGS] = { 0 };  // Latest time Tag was scanned
 int tagCount = 0;                    // Counter for unique tags
@@ -27,25 +28,25 @@ void setup() {
   Serial.begin(115200);
   delay(200);
 
-  WiFi.enableInsecureWEP();
+  WiFi.mode(WIFI_STA); //Optional
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
     delay(500);
   }
 
-  Serial.println("");
-  Serial.swap();
-  delay(200);
+  Serial.println("Connected");
   http.begin(client, serverName);
+
+  Serial2.begin(115200,SERIAL_8N1,16,17, true);
 }
 
 // main loop
 void loop() {
   bool tagListChanged = false;
-  if(Serial.available() >= 10) {
+  if(Serial2.available() >= 10) {
     uint32_t arrivalTime = millis();
-    incomingTag = Serial.readStringUntil('\x03');
+    incomingTag = Serial2.readStringUntil('\x03');
     
     String number = String();
     for (int i = 0; i < incomingTag.length(); i++) {
@@ -59,13 +60,6 @@ void loop() {
     }
 
     incomingTag = number;
-    /*
-    Serial.swap();
-    delay(10);
-    Serial.println(incomingTag);
-    Serial.flush();
-    Serial.swap();
-    */
     int tagIndex = isTagAlreadyKnown(incomingTag);
     if (tagIndex == -1) {
       tagListChanged = true;
@@ -95,11 +89,7 @@ void loop() {
   if (tagListChanged) {
     tagList = tagListToJSON();
 
-    Serial.swap();
-    //delay(10);
     Serial.println(tagList);
-    Serial.flush();
-    Serial.swap();
 
     http.addHeader("Content-Type", "application/json");
     http.POST(tagList);

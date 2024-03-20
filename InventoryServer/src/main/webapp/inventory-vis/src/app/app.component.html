@@ -1,33 +1,4 @@
-<mat-toolbar color="primary"> <img class="img-fluid" src="assets/img.png"/> ScanCheck Solutions</mat-toolbar>
-<div class="example-container">
-  <h2 style="margin-top: 2%" *ngIf="numPresent >= 1">Item List</h2>
-<div class="mat-elevation-z8"  *ngIf="numPresent >= 1">
-  <mat-table #table [dataSource]="data">
-
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Item </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="present">
-      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-      <mat-cell *matCellDef="let element" style="justify-content: center"
-                [ngClass]="[element.isPresent ? 'good' : 'bad']">
-        {{element.isPresent ? "Found" : "Missing"}}
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"
-             >
-    </mat-row>
-  </mat-table>
-</div>
-  <div style="padding-top: 5%" *ngIf="numPresent < 1">
-    <mat-progress-spinner mode="indeterminate" style="margin-left: auto; margin-right: auto;"></mat-progress-spinner>
-    <br>
-    <div style="display: flex; justify-content: center">
-      <h2 style="margin-left: auto; margin-right: auto;">Waiting for backpack</h2></div>
-    </div>
-</div>
-
+<mat-toolbar color="primary"> <img class="img-fluid" src="assets/img.png"/>
+  ScanCheck Solutions
+</mat-toolbar>
+<router-outlet></router-outlet>

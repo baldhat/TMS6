@@ -9,5 +9,6 @@ class Item(
         var isPresent: Boolean,
         @Id
         val id: String,
-        var scannerId: String = "0"
+        var scannerId: String = "0",
+        var active: Boolean = true
 )

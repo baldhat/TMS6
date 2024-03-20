@@ -1,0 +1,17 @@
+@use "sass:map";
+@use '@angular/material' as mat;
+
+@import "../../styles";
+
+.good {
+  background: map.get($wfs-blue-palette, 200);
+}
+
+.bad {
+  background: map.get(mat.$red-palette, 200);
+}
+
+.example-container {
+  margin-left: 10%;
+  margin-right: 10%;
+}

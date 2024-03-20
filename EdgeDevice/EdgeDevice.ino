@@ -2,6 +2,10 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 #include <stdint.h>
+#include <Adafruit_NeoPixel.h>
+
+#define NEO_PIXEL_PIN D5
+#define PIXELCOUNT 6
 
 #define TAG_REMOVED_TRESHOLD 10000
 
@@ -18,21 +22,32 @@ const int MAX_TAGS = 10;             // Maximum number of unique tags to store
 String uniqueTags[MAX_TAGS];         // Array to store unique tags
 uint32_t tagTime[MAX_TAGS] = { 0 };  // Latest time Tag was scanned
 int tagCount = 0;                    // Counter for unique tags
+uint8_t currentMaxTags = 0;          // keeps track of the number of tags there should be in the bag
 
 String incomingTag = "";
 String tagList = "";
+
+// LED Strip
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXELCOUNT, NEO_PIXEL_PIN, NEO_GRB+NEO_KHZ400);
 
 // connect to WiFi
 void setup() {
   Serial.begin(115200);
   delay(200);
 
+  // LED strip setup
+  strip.begin();            
+  strip.setBrightness(20);  // set the maximum LED intensity down to 20
+  strip.show();             // Initialize all pixels to 'off'
+
   WiFi.enableInsecureWEP();
   WiFi.begin(ssid, password);
+  ledShowConnecting();
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
     delay(500);
   }
+  ledOff();
 
   Serial.println("");
   Serial.swap();
@@ -152,4 +167,39 @@ String tagListToJSON() {
   }
   jsonTagList.remove(jsonTagList.length() - 2, 2);
   return "\t[" + jsonTagList + "]";
+}
+
+void ledShowMissing() {
+  for (int i = 0; i < PIXELCOUNT; i++){
+    strip.setPixelColor(i, 255, 0, 0); // color channels are r g b
+  }
+  strip.show();
+}
+
+void ledShowComplete() {
+  for (int i = 0; i < PIXELCOUNT; i++){
+    strip.setPixelColor(i, 0, 255, 0); // color channels are r g b
+  }
+  strip.show();
+}
+
+void ledShowScanning() {
+  for (int i = 0; i < PIXELCOUNT; i++){
+    strip.setPixelColor(i, 255, 255, 0); // color channels are r g b
+  }
+  strip.show();
+}
+
+void ledShowConnecting() {
+  for (int i = 0; i < PIXELCOUNT; i++){
+    strip.setPixelColor(i, 255, 0, 255); // color channels are r g b
+  }
+  strip.show();
+}
+
+void ledOff() {
+  for (int i = 0; i < PIXELCOUNT; i++){
+    strip.setPixelColor(i, 0, 0, 0); // color channels are r g b
+  }
+  strip.show();
 }

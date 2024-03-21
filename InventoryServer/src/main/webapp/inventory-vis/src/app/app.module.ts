@@ -13,6 +13,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { ConfigComponent } from './config/config.component';
 import { ItemsComponent } from './items/items.component';
 import {MatCheckbox} from "@angular/material/checkbox";
+import {MatIcon} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -20,17 +21,18 @@ import {MatCheckbox} from "@angular/material/checkbox";
     ConfigComponent,
     ItemsComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule,
-    MatCheckbox
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatProgressSpinnerModule,
+        MatToolbarModule,
+        MatCheckbox,
+        MatIcon
+    ],
   providers: [
     provideAnimationsAsync()
   ],

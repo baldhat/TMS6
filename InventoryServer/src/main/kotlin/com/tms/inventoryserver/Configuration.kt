@@ -15,7 +15,7 @@ internal class LoadDatabase {
     fun initDatabase(repository: ItemRepository): CommandLineRunner {
         return CommandLineRunner { args: Array<String?>? ->
             log.info("Preloading " + repository.save(Item("First Aid Dressing 1", false, "0000000006", "1")))
-            log.info("Preloading " + repository.save(Item("Instant Cold Pack", false, "0000000007", "1")))
+            //log.info("Preloading " + repository.save(Item("Instant Cold Pack", false, "0000000007", "1")))
             log.info("Preloading " + repository.save(Item("Triangular Bandage 1", false, "0000000022", "1")))
             log.info("Preloading " + repository.save(Item("Elastic Bandage 1", false, "0000000011", "1")))
             log.info("Preloading " + repository.save(Item("First Aid Dressing 2", false, "0000000009", "1")))
@@ -24,8 +24,8 @@ internal class LoadDatabase {
             log.info("Preloading " + repository.save(Item("Nonwoven Swabs 2", false, "0000000020", "1")))
             log.info("Preloading " + repository.save(Item("First Aid Dressing 3", false, "0000000015", "1")))
             log.info("Preloading " + repository.save(Item("First Aid Dressing 4", false, "0000000019", "1")))
-            log.info("Preloading " + repository.save(Item("Medical Tape", false, "0000000013", "1")))
-            log.info("Preloading " + repository.save(Item("Medical Scissors", false, "0000000001", "1")))
+            //log.info("Preloading " + repository.save(Item("Medical Tape", false, "0000000013", "1")))
+            //log.info("Preloading " + repository.save(Item("Medical Scissors", false, "0000000001", "1")))
             log.info("Preloading " + repository.save(Item("Wound Plasters 2", false, "0000000008", "1")))
             log.info("Preloading " + repository.save(Item("Triangular Bandage 2", false, "0000000018", "1")))
             log.info("Preloading " + repository.save(Item("Disposable Vinyl Gloves", false, "0000000021", "1")))

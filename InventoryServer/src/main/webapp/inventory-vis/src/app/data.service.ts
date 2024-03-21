@@ -2,6 +2,19 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 
+export class Item {
+  constructor(
+    public name: string,
+    public isPresent: boolean,
+    public id: string,
+    public scannerId: string,
+    public expiresAt: Date,
+    public active: boolean
+) {
+
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,12 +23,12 @@ export class DataService {
   constructor(private http: HttpClient) { }
 
 
-  getData(): Observable<any> {
-    return this.http.get('/api/items/active');
+  getData(): Observable<Item[]> {
+    return this.http.get<Item[]>('/api/items/active');
   }
 
-  getAllItems(): Observable<any> {
-    return this.http.get('/api/items');
+  getAllItems(): Observable<Item[]> {
+    return this.http.get<Item[]>('/api/items');
   }
 
   private handleError(error: HttpErrorResponse) {

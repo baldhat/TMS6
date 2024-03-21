@@ -4,7 +4,7 @@
 @import "../../styles";
 
 .good {
-  background: map.get($wfs-blue-palette, 200);
+  background: lightgreen //map.get($wfs-blue-palette, 200);
 }
 
 .bad {

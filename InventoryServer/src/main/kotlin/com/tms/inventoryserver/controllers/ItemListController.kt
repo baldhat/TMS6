@@ -29,13 +29,16 @@ class ItemListController(
     }
 
     @PostMapping("/scanners/{id}/present")
-    fun setPresentItems(@PathVariable id: String, @RequestBody presentIds: List<String> ): Boolean {
+    fun setPresentItems(@PathVariable id: String, @RequestBody presentIds: List<String> ): Int {
         log.info("Received set present items")
         repository.findByScannerId(id).forEach {
             it.isPresent = presentIds.contains(it.id)
             repository.save(it)
         }
-        return true;
+        var numPresent = repository.findByActiveOrderByIsPresentAsc(true).count{
+          it.isPresent;
+        }
+        return if (numPresent >= repository.findByActiveOrderByIsPresentAsc(true).count()) 1 else 0
     }
 
     @PostMapping("/items/enable/{itemId}")

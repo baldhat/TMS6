@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import {DataService} from "../data.service";
+import {DataService, Item} from "../data.service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 @Component({
   selector: 'app-items',
@@ -12,9 +12,10 @@ export class ItemsComponent {
   constructor(private dataService: DataService) {
   }
 
-  displayedColumns = ['name', 'present'];
-  data: any;
+  displayedColumns = ['name', 'expiresAt', 'present'];
+  data: Item[] = [];
   numPresent = 0;
+  today = Date.now()
 
   ngOnInit() {
     setInterval(() => {
@@ -22,6 +23,7 @@ export class ItemsComponent {
         this.data = response;
         var counter = 0;
         for (var i = 0; i < response.length; i++) {
+          this.data[i].expiresAt = new Date(response[i].expiresAt)
           if (response[i].isPresent) {
             counter++;
           }
@@ -32,4 +34,5 @@ export class ItemsComponent {
   }
 
 
+  protected readonly Date = Date;
 }

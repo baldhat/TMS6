@@ -8,6 +8,14 @@
         <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="expiresAt">
+        <mat-header-cell *matHeaderCellDef> Expires at </mat-header-cell>
+        <mat-cell *matCellDef="let element" [ngStyle]="{'color': today > element.expiresAt ? 'red' : ''}">
+          {{('000000000' + (element.expiresAt.getMonth()+1)).substr(-2) + "/" + element.expiresAt.getFullYear() }}
+          <mat-icon style="margin-left: 10px" *ngIf="today > element.expiresAt" color="yellow">warning</mat-icon>
+        </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="present">
         <mat-header-cell *matHeaderCellDef> </mat-header-cell>
         <mat-cell *matCellDef="let element" style="justify-content: center"
